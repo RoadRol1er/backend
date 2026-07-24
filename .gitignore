@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Django/local runtime
+db.sqlite3
+*.sqlite3
+.env
+.env.*
+!.env.example
+staticfiles/
+
+# Firebase backend secret. Never commit service account private keys.
+firebase-service-account*.json
+service-account*.json
+
+# Logs and temporary files
+*.log
+*.pid
+*.tmp
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+
+# Codex/local agent metadata
+.agents/
+.codex/
