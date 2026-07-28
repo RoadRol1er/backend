@@ -1,3 +1,5 @@
+import json
+
 from django.conf import settings
 
 from .models import DeviceToken, Notification
@@ -51,6 +53,11 @@ def _firebase_is_ready() -> bool:
         return False
 
     if firebase_admin._apps:
+        return True
+
+    credentials_json = settings.FIREBASE_CREDENTIALS_JSON
+    if credentials_json:
+        firebase_admin.initialize_app(credentials.Certificate(json.loads(credentials_json)))
         return True
 
     credentials_path = settings.FIREBASE_CREDENTIALS_PATH

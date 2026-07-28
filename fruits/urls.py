@@ -9,6 +9,7 @@ from .views import (
     NotificationViewSet,
     RegisterView,
     ScrapeStockView,
+    ScheduledScrapeStockView,
     UserFruitWatchViewSet,
     index,
 )
@@ -26,5 +27,6 @@ urlpatterns = [
     path("api/auth/token/", obtain_auth_token, name="api-token-auth"),
     path("api/stock/current/", CurrentStockView.as_view(), name="current-stock"),
     path("api/stock/scrape/", ScrapeStockView.as_view(), name="scrape-stock"),
+    path("api/stock/scheduled-scrape/", ScheduledScrapeStockView.as_view(), name="scheduled-scrape-stock"),
     path("api-auth/", include("rest_framework.urls")),
 ]

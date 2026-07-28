@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.shortcuts import render
 from rest_framework import mixins, permissions, status, viewsets
 from rest_framework.decorators import action
@@ -105,6 +106,19 @@ class ScrapeStockView(APIView):
     permission_classes = [permissions.IsAdminUser]
 
     def post(self, request):
+        snapshot = scrape_and_update_stock()
+        serializer = StockSnapshotSerializer(snapshot, context={"request": request})
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class ScheduledScrapeStockView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        provided_key = request.headers.get("X-Scrape-Key") or request.query_params.get("key")
+        if not settings.SCRAPE_SECRET_KEY or provided_key != settings.SCRAPE_SECRET_KEY:
+            return Response({"detail": "Invalid scrape key."}, status=status.HTTP_403_FORBIDDEN)
+
         snapshot = scrape_and_update_stock()
         serializer = StockSnapshotSerializer(snapshot, context={"request": request})
         return Response(serializer.data, status=status.HTTP_201_CREATED)
