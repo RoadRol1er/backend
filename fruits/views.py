@@ -114,7 +114,7 @@ class ScrapeStockView(APIView):
 class ScheduledScrapeStockView(APIView):
     permission_classes = [permissions.AllowAny]
 
-    def post(self, request):
+    def _scrape(self, request):
         provided_key = request.headers.get("X-Scrape-Key") or request.query_params.get("key")
         if not settings.SCRAPE_SECRET_KEY or provided_key != settings.SCRAPE_SECRET_KEY:
             return Response({"detail": "Invalid scrape key."}, status=status.HTTP_403_FORBIDDEN)
@@ -122,3 +122,9 @@ class ScheduledScrapeStockView(APIView):
         snapshot = scrape_and_update_stock()
         serializer = StockSnapshotSerializer(snapshot, context={"request": request})
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def get(self, request):
+        return self._scrape(request)
+
+    def post(self, request):
+        return self._scrape(request)
